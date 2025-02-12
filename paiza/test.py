@@ -1,13 +1,20 @@
-N,M,Q = list(map(int, input().split()))
-A = [list(map(int, input().split())) for _ in range(N)]
-B = [list(map(int, input().split())) for _ in range(Q)]
+N,X = list(map(int, input().split()))
+Q = [list(input().split()) for _ in range(N)]
 
-sum_list = [[0] * (M + 1) for _ in range(N + 1)]
-
+elevator = []
+weight_total = 0
 for i in range(N):
-    for j in range(M):
-        sum_list[i+1][j+1] = A[i][j] + sum_list[i][j+1] + sum_list[i+1][j] - sum_list[i][j]
+    query = Q[i]
+    if query[0] == 'ride':
+        for person_w in query[2:]:
+            person_w = int(person_w)
+            if weight_total + person_w <= X:
+                elevator.append(person_w)
+                weight_total += person_w
+    else:
+        for _ in range(int(query[1])):
+            person_w = elevator.pop()
+            weight_total -= person_w
 
-for a,b,c,d in B:
-    a, b, c, d = a + 1, b + 1, c + 1, d + 1 
-    print(sum_list[c][d] - sum_list[a-1][d] - sum_list[c][b-1] + sum_list[a-1][b-1])
+print(len(elevator))
+print(weight_total)
